@@ -1,7 +1,7 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude} from 'class-transformer';
 import { BaseEntity } from '../../common/interfaces/base.entity';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../users/infrastructure/persistence/users.orm-entity';
 import { JoinColumn } from 'typeorm';
 
 @Entity('doctors')
@@ -20,6 +20,10 @@ export class Doctor extends BaseEntity {
 
   @Column()
   userId: string;
+
+  @Exclude()
+  @Column({ default: true })
+  isActive: boolean;
 
   @OneToOne(() => User, { cascade: true, eager: true })
   @JoinColumn()

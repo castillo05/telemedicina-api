@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User, UserRole } from '../../users/entities/user.entity';
+import { User, UserRole } from '../../users/infrastructure/persistence/users.orm-entity';
 import * as bcrypt from 'bcrypt';
 
 export async function createAdminUser(dataSource: DataSource) {
@@ -23,7 +23,7 @@ export async function createAdminUser(dataSource: DataSource) {
   console.log('Original password length:', password.length);
   console.log('Original password char codes:', Array.from(password).map(c => c.charCodeAt(0)));
   console.log('Using fixed salt:', salt);
-  
+
   const hashedPassword = await bcrypt.hash(password, salt);
   console.log('Hashed password:', hashedPassword);
   console.log('Hashed password length:', hashedPassword.length);
@@ -42,4 +42,4 @@ export async function createAdminUser(dataSource: DataSource) {
 
   await userRepository.save(adminUser);
   console.log('Admin user created successfully');
-} 
+}

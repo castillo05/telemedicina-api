@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { UserResponseDto } from '../../users/infrastructure/dto/user-response.dto';
 
 export class DoctorResponseDto {
   @Expose()
@@ -25,4 +26,13 @@ export class DoctorResponseDto {
   @Expose()
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   userId: string;
+
+  @Expose()
+  @ApiProperty({ example: true })
+  isActive: boolean;
+
+  @Expose()
+  @Type(() => UserResponseDto)
+  @ApiProperty({ type: () => UserResponseDto, required: false, description: 'User details associated with the doctor' })
+  user?: UserResponseDto;
 }

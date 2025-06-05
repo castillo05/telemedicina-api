@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
-import { User } from '../users/entities/user.entity';
+// import { User } from '../users/domain/entities/user.entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -52,4 +52,4 @@ export class AuthController {
       throw new UnauthorizedException('Invalid credentials');
     }
   }
-} 
+}

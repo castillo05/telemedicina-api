@@ -1,8 +1,8 @@
 import { Entity, Column, BeforeInsert, BeforeUpdate, OneToOne } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
-import { BaseEntity } from '../../common/interfaces/base.entity';
-import { Doctor } from '../../doctors/entities/doctor.entity';
+import { BaseEntity } from '../../../common/interfaces/base.entity';
+import { Doctor } from '../../../doctors/entities/doctor.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -59,6 +59,7 @@ export class User extends BaseEntity {
   }
 
   async validatePassword(password: string): Promise<boolean> {
+    console.log('Validating password for user:', this.email);
     const isMatch = await bcrypt.compare(password, this.password);
     return isMatch;
   }

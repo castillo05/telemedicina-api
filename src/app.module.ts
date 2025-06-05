@@ -7,6 +7,8 @@ import { dataSourceOptions } from '../typeorm.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DoctorsModule } from './doctors/doctors.module';
+import { UsersRepository } from './users/domain/repositories/users.repository';
+import { UsersTypeormRepository } from './users/infrastructure/persistence/users.typeorm.repository';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { DoctorsModule } from './doctors/doctors.module';
     DoctorsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}

@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/application/services/users.service';
+import { User } from '../users/infrastructure/persistence/users.orm-entity';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -13,8 +14,8 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     console.log('AuthService: Validating user...');
     console.log('Email:', email);
-    
-    const user = await this.usersService.findByEmail(email);
+
+    const user = await this.usersService.findByEmail.execute(email);
     console.log('User found:', user ? 'Yes' : 'No');
 
     if (!user || !user.isActive) {
@@ -23,7 +24,7 @@ export class AuthService {
     }
 
     console.log('Attempting to validate password...');
-    const isPasswordValid = await user.validatePassword(password);
+    const isPasswordValid = await this.usersService.validatePassword.execute(password, email);
     console.log('Password validation result:', isPasswordValid);
 
     if (!isPasswordValid) {
@@ -31,15 +32,15 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    console.log('User validated successfully');
-    return user;
+    console.log('User validated successfully', user);
+    return plainToInstance(User, user, );
   }
 
   async login(user: User) {
     console.log('AuthService: Logging in user...');
     console.log('User ID:', user.id);
     console.log('User email:', user.email);
-    
+
     const payload = { email: user.email, sub: user.id };
     const token = this.jwtService.sign(payload);
     console.log('Generated JWT token');
@@ -55,4 +56,4 @@ export class AuthService {
       },
     };
   }
-} 
+}

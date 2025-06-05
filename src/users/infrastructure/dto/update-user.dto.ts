@@ -1,6 +1,6 @@
 import { IsBoolean, IsEmail, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from '../entities/user.entity';
+import { UserRole } from '../persistence/users.orm-entity';
 
 export class UpdateUserDto {
   @ApiProperty({ example: 'John', required: false })
@@ -40,4 +40,4 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
-} 
+}

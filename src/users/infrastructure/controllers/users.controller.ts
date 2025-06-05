@@ -1,13 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseUUIDPipe,
+  ParseBoolPipe,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserResponseDto } from './dto/user-response.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from './entities/user.entity';
+import { UsersService } from '../../application/services/users.service';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserResponseDto } from '../dto/user-response.dto';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../../auth/guards/roles.guard';
+import { Roles } from '../../../auth/decorators/roles.decorator';
+import { UserRole } from '../persistence/users.orm-entity';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('users')
 @Controller('users')
@@ -23,7 +35,9 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Invalid input data' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
-    return this.usersService.create(createUserDto);
+    return this.usersService.create.execute(createUserDto).then(user =>
+      plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true })
+    );
   }
 
   @Get()
@@ -31,7 +45,9 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Return all users', type: [UserResponseDto] })
   findAll(): Promise<UserResponseDto[]> {
-    return this.usersService.findAll();
+    return this.usersService.findAll.execute().then(users =>{
+      return users.map(user => plainToInstance(UserResponseDto, user));
+    })
   }
 
   @Get(':id')
@@ -41,7 +57,12 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Return the user', type: UserResponseDto })
   @ApiResponse({ status: 404, description: 'User not found' })
   findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto> {
-    return this.usersService.findOne(id);
+    return this.usersService.findOne.execute(id).then(user =>{
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true });
+    })
   }
 
   @Patch(':id')
@@ -56,7 +77,12 @@ export class UsersController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update.execute(id, updateUserDto).then(user => {
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true });
+    })
   }
 
   @Delete(':id')
@@ -66,26 +92,27 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    return this.usersService.remove(id);
+    return this.usersService.delete.execute(id);
   }
 
-  @Patch(':id/activate')
+  @Patch(':id/activate/:isActive')
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Activate a user' })
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
-  @ApiResponse({ status: 200, description: 'User activated successfully', type: UserResponseDto })
+  @ApiParam({ name: 'isActive', type: 'boolean', required: false })
+  @ApiResponse({ status: 200, description: 'User activated successfully', type: Boolean })
   @ApiResponse({ status: 404, description: 'User not found' })
-  activate(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto> {
-    return this.usersService.activate(id);
+  activate(@Param('id', ParseUUIDPipe) id: string, @Param('isActive', ParseBoolPipe) isActive: boolean): Promise<boolean> {
+    return this.usersService.activate.execute(id, isActive);
   }
-
-  @Patch(':id/deactivate')
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Deactivate a user' })
-  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
-  @ApiResponse({ status: 200, description: 'User deactivated successfully', type: UserResponseDto })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  deactivate(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto> {
-    return this.usersService.deactivate(id);
-  }
-} 
+  //
+  // @Patch(':id/deactivate')
+  // @Roles(UserRole.ADMIN)
+  // @ApiOperation({ summary: 'Deactivate a user' })
+  // @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  // @ApiResponse({ status: 200, description: 'User deactivated successfully', type: UserResponseDto })
+  // @ApiResponse({ status: 404, description: 'User not found' })
+  // deactivate(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto> {
+  //   return this.usersService.deactivate(id);
+  // }
+}
