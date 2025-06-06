@@ -32,6 +32,6 @@ import { ActivateUsersUsecase } from './application/use-cases/activate-users.use
       useClass: UsersTypeormRepository,
     },
   ],
-  exports: [UsersService],
+  exports: [UsersService, 'USERS_REPOSITORY'],
 })
 export class UsersModule {}

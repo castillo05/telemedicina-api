@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../persistence/users.orm-entity';
 import { Expose, Type } from 'class-transformer';
-import { DoctorResponseDto } from '../../../doctors/dto/doctor-response.dto';
+import { DoctorResponseDto } from '../../../doctors/infrastructure/dto/doctor-response.dto';
 
 export class UserResponseDto {
   @Expose()

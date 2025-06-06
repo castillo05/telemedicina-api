@@ -61,7 +61,6 @@ export class UsersTypeormRepository implements UsersRepository {
     }
 
     const user = this.usersRepository.create({
-      id: createUserDto.id,
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       email: createUserDto.email,

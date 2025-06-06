@@ -2,7 +2,7 @@ import { Entity, Column, BeforeInsert, BeforeUpdate, OneToOne } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { BaseEntity } from '../../../common/interfaces/base.entity';
-import { Doctor } from '../../../doctors/entities/doctor.entity';
+import { Doctor } from '../../../doctors/infrastructure/persistence/doctors.orm-entity';
 
 export enum UserRole {
   ADMIN = 'admin',

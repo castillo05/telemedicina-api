@@ -2,7 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { User } from './src/users/infrastructure/persistence/users.orm-entity';
-import { Doctor } from './src/doctors/entities/doctor.entity';
+import { Doctor } from './src/doctors/infrastructure/persistence/doctors.orm-entity';
 
 config();
 

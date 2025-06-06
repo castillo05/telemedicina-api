@@ -1,12 +1,13 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { DoctorsService } from './doctors.service';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRole } from '../users/infrastructure/persistence/users.orm-entity';
-import { DoctorResponseDto } from './dto/doctor-response.dto';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../../auth/guards/roles.guard';
+import { DoctorsService } from '../../application/services/doctors.service';
+import { CreateDoctorDto } from '../dto/create-doctor.dto';
+import { Roles } from '../../../auth/decorators/roles.decorator';
+import { UserRole } from '../../../users/infrastructure/persistence/users.orm-entity';
+import { DoctorResponseDto } from '../dto/doctor-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Controller('doctors')
 @ApiTags('Doctors')
@@ -20,8 +21,9 @@ export class DoctorsController {
   @ApiOperation({ summary: 'Create a new doctor' })
   @ApiResponse({ status: 201, description: 'Doctor created successfully', type: CreateDoctorDto })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
-  createDoctor(@Body() doctorDto: CreateDoctorDto): Promise<any> {
-    return this.doctorsService.create(doctorDto);
+  async createDoctor(@Body() doctorDto: CreateDoctorDto): Promise<DoctorResponseDto> {
+    const doctor = await this.doctorsService.create.execute(doctorDto);
+    return plainToInstance(DoctorResponseDto, doctor, { excludeExtraneousValues: true });
   }
 
   @Get()
@@ -29,7 +31,7 @@ export class DoctorsController {
   @ApiOperation({ summary: 'Get all doctors' })
   @ApiResponse({ status: 200, description: 'List of doctors', type: [CreateDoctorDto] })
   getAllDoctors(): Promise<DoctorResponseDto[]> {
-    return this.doctorsService.getAll();
+    return this.doctorsService.find.execute();
   }
 
   @Get(':id')
@@ -38,7 +40,7 @@ export class DoctorsController {
   @ApiResponse({ status: 200, description: 'Doctor details', type: DoctorResponseDto })
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
   getDoctorById(@Body('id') id: string): Promise<DoctorResponseDto> {
-    return this.doctorsService.findOne(id);
+    return this.doctorsService.findOne.execute(id);
   }
 
   @Put(':id')
@@ -51,17 +53,17 @@ export class DoctorsController {
     @Body('id') id: string,
     @Body() updateDoctorDto: CreateDoctorDto,
   ): Promise<DoctorResponseDto> {
-    return this.doctorsService.update(id, updateDoctorDto);
+    return this.doctorsService.update.execute(id, updateDoctorDto);
   }
 
-  @Put(':id/soft-delete')
+  @Delete(':id/delete')
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Soft delete a doctor' })
   @ApiResponse({ status: 200, description: 'Doctor soft deleted successfully', type: DoctorResponseDto })
   @ApiResponse({ status: 404, description: 'Doctor not found' })
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
-  softDeleteDoctor(@Body('id') id: string): Promise<DoctorResponseDto> {
-    return this.doctorsService.softDelete(id);
+  softDeleteDoctor(@Body('id') id: string): Promise<boolean> {
+    return this.doctorsService.delete.execute(id);
   }
 
 }

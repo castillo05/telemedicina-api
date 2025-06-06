@@ -1,8 +1,7 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { Exclude} from 'class-transformer';
-import { BaseEntity } from '../../common/interfaces/base.entity';
-import { User } from '../../users/infrastructure/persistence/users.orm-entity';
-import { JoinColumn } from 'typeorm';
+import { BaseEntity } from '../../../common/interfaces/base.entity';
+import { User } from '../../../users/infrastructure/persistence/users.orm-entity';
 
 @Entity('doctors')
 export class Doctor extends BaseEntity {
