@@ -46,10 +46,10 @@ export class ClinicsResponseDto{
   planId?: string;
 
   @Expose()
-  @ApiProperty({ type: () => UserResponseDto, example: ['123e4567-e89b-12d3-a456-426614174000'] })
-  users: string[]; // Assuming users are represented by their IDs
+  @ApiProperty({ type: () => UserResponseDto, isArray: true, description: 'List of users associated with the clinic' })
+  users: UserResponseDto; // Assuming users are represented by their IDs
 
   @Expose()
   @ApiProperty({type: () => DoctorResponseDto, required: false, description: 'Primary doctor associated with the clinic'})
-  primaryDoctor?: DoctorResponseDto;
+  doctor?: DoctorResponseDto;
 }

@@ -6,6 +6,6 @@ export interface ClinicsRepository {
   create(clinic: Clinics): Promise<Clinics>;
   findById(id: string): Promise<Clinics | null>;
   // update(id: string, clinic: Clinics): Promise<Clinics>;
-  // findAll(): Promise<Clinics[]>;
+  findAll(): Promise<Clinics[]>;
   // delete(id: string): Promise<boolean>;
 }

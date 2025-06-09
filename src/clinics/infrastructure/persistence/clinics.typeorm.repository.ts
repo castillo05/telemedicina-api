@@ -53,4 +53,12 @@ export class ClinicsTypeormRepository implements ClinicsRepository {
       users: clinic.users.map(user => ({ id: user.id, firstName: user.firstName, lastName: user.lastName })),
     };
   }
+
+  async findAll(): Promise<Clinics[]> {
+    const clinics = await this.clinicsOrmRepository.find({ relations: ['users', 'doctors'] });
+    return clinics.map(clinic => ({
+      ...clinic,
+      users: clinic.users.map(user => ({ ...user})),
+    }));
+  }
 }

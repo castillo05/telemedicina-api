@@ -6,6 +6,7 @@ import { ClinicsController } from './infrastructure/controllers/clinics.controll
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClinicsOrmEntity } from './infrastructure/persistence/clinics.orm-entity';
 import { FindByIdUsecase } from './application/use-cases/find-by-id.usecase';
+import { FindClinicsUseCase } from './application/use-cases/find-users.usecase';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { FindByIdUsecase } from './application/use-cases/find-by-id.usecase';
     ClinicService,
     CreateClinicsUsecase,
     FindByIdUsecase,
+    FindClinicsUseCase,
     {
       provide: 'CLINICS_REPOSITORY',
       useClass: ClinicsTypeormRepository,
