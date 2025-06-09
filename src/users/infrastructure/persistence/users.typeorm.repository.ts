@@ -22,14 +22,14 @@ export class UsersTypeormRepository implements UsersRepository {
   async findAll(): Promise<Users[]> {
     const users = await this.usersRepository.find({
       relations: ['clinic'],
+      where: { isActive: true },
     });
     return users.map(user => plainToInstance(Users, user, {}));
   }
 
   async findById(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: { id },
-      relations: ['clinic'],
+      where: { id, isActive: true },
     });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -84,7 +84,11 @@ export class UsersTypeormRepository implements UsersRepository {
   }
 
   async update(id: string, updateUserDto: Users): Promise<Users> {
-    const user = await this.findById(id);
+    const user = await this.usersRepository.findOne({where: { id }});
+    console.log('Updating user with ID:', id);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
 
     if (updateUserDto.email && updateUserDto.email !== user.email) {
       const existingUser = await this.findByEmail(updateUserDto.email);
@@ -111,5 +115,15 @@ export class UsersTypeormRepository implements UsersRepository {
     }
     const isMatch = await bcrypt.compare(password, userData.password);
     return isMatch;
+  }
+
+  async activateUser(id: string, isActive: boolean): Promise<boolean> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    user.isActive = isActive;
+    await this.usersRepository.save(user);
+    return true;
   }
 }

@@ -14,4 +14,5 @@ export interface UsersRepository {
   update(id: string, user: Users): Promise<Users>;
   delete(id: string): Promise<void>;
   validatePassword(password: string, email: string): Promise<boolean>;
+  activateUser(id: string, isActive: boolean): Promise<boolean>;
 }

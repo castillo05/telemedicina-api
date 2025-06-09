@@ -18,4 +18,9 @@ export class UpdateUsersUsecase {
     Object.assign(user, updateData);
     return await this.userRepository.update(userId, user);
   }
+
+  async activateUser(userId: string, isActive: boolean): Promise<boolean> {
+    await this.userRepository.activateUser(userId, isActive);
+    return true;
+  }
 }

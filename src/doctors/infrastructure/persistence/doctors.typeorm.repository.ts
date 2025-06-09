@@ -47,7 +47,7 @@ export class DoctorsTypeormRepository implements DoctorsRepository {
   }
 
   async findAll(): Promise<Doctors[]> {
-    const doctors = await this.doctorsRepository.find({ relations: ['user'] });
+    const doctors = await this.doctorsRepository.find({ relations: ['user'], where: { isActive: true } });
     return doctors.map(doctor => plainToInstance(Doctors, doctor));
   }
 
@@ -81,7 +81,7 @@ export class DoctorsTypeormRepository implements DoctorsRepository {
   }
 
   async findById(id: string): Promise<Doctors | null> {
-    const doctor = await this.doctorsRepository.findOne({ where: { id }, relations: ['user'] });
+    const doctor = await this.doctorsRepository.findOne({ where: { id, isActive: true }, relations: ['user'] });
     if (!doctor) {
       return null;
     }

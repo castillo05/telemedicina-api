@@ -10,12 +10,7 @@ export class ActivateUsersUsecase {
   }
 
   async execute(userId: string, isActive: boolean): Promise<boolean> {
-    const user = await this.userRepository.findById(userId);
-    if (!user) {
-      throw new Error('No user found for the provided ID');
-    }
-    user.isActive = isActive;
-    await this.userRepository.update(user.id, user);
+    await this.userRepository.activateUser(userId, isActive);
     return true;
   }
 }

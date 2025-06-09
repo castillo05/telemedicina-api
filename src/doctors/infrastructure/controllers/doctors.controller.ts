@@ -8,6 +8,7 @@ import { Roles } from '../../../auth/decorators/roles.decorator';
 import { UserRole } from '../../../users/infrastructure/persistence/users.orm-entity';
 import { DoctorResponseDto } from '../dto/doctor-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { UpdateDoctorDto } from '../dto/update-doctors.dto';
 
 @Controller('doctors')
 @ApiTags('Doctors')
@@ -51,7 +52,7 @@ export class DoctorsController {
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
   updateDoctor(
     @Body('id') id: string,
-    @Body() updateDoctorDto: CreateDoctorDto,
+    @Body() updateDoctorDto: UpdateDoctorDto,
   ): Promise<DoctorResponseDto> {
     return this.doctorsService.update.execute(id, updateDoctorDto);
   }
