@@ -11,9 +11,10 @@ import { UpdateDoctorsUsecase } from './application/use-cases/update-doctors.use
 import { FindDoctorsUsecase } from './application/use-cases/find-doctors.usecase';
 import { FindDoctorUsecase } from './application/use-cases/find-doctor.usecase';
 import { DeleteDoctorsUsecase } from './application/use-cases/delete-doctors.usecase';
+import { ClinicsModule } from '../clinics/clinics.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Doctor]), UsersModule],
+  imports: [TypeOrmModule.forFeature([Doctor]), UsersModule, ClinicsModule],
   providers: [
     DoctorsService,
     CreateDoctorsUsecase,

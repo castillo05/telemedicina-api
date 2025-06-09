@@ -22,7 +22,8 @@ export class CreateUsersUseCase {
       true,   // isActive
       false,  // isEmailVerified
       dto.password,
-      ''    // resetPasswordToken
+      '',    // resetPasswordToken,
+      dto.clinicId,
     );
 
     const existingUser = await this.usersRepository.findByEmail(user.email);

@@ -10,6 +10,7 @@ export class Users {
     public isEmailVerified: boolean,
     public password: string,
     public resetPasswordToken: string,
+    public clinicId?: string,
     // public resetPasswordExpires: Date,
     // public createdAt: Date,
     // public updatedAt: Date,

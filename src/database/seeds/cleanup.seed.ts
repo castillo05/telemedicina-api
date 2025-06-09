@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
-import { Users } from '../../users/domain/entities/user.entity';
+import { User } from '../../users/infrastructure/persistence/users.orm-entity';
 
 export async function cleanupAdminUser(dataSource: DataSource) {
-  const userRepository = dataSource.getRepository(Users);
+  const userRepository = dataSource.getRepository(User);
 
   // Delete admin user if exists
   const existingAdmin = await userRepository.findOne({

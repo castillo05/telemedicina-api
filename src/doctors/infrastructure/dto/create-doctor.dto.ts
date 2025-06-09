@@ -31,4 +31,8 @@ export class CreateDoctorDto {
   @IsString()
   @MinLength(36, { message: 'User ID must be a valid UUID.' })
   userId: string;
+
+  @ApiProperty({ example: '7a8ca1a5-2aa9-4fa4-b705-51620cc22de9', required: true })
+  @IsNotEmpty()
+  clinicId: string;
 }

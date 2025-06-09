@@ -19,7 +19,8 @@ export class CreateDoctorsUsecase {
       input.clinicName,
       input.clinicAddress || '',
       input.userId,
-      false, // isActive
+      false, // isActive,
+      input.clinicId,
     )
     return await this.doctorsRepository.create(doctor);
   }

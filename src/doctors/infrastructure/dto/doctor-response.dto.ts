@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { UserResponseDto } from '../../../users/infrastructure/dto/user-response.dto';
+import { ClinicsResponseDto } from '../../../clinics/infrastructure/dto/clinics.response.dto';
 
 export class DoctorResponseDto {
   @Expose()
@@ -35,4 +36,9 @@ export class DoctorResponseDto {
   @Type(() => UserResponseDto)
   @ApiProperty({ type: () => UserResponseDto, required: false, description: 'User details associated with the doctor' })
   user?: UserResponseDto;
+
+  @Expose()
+  @Type(() => ClinicsResponseDto)
+  @ApiProperty({ type: () => ClinicsResponseDto, required: false, description: 'Clinic details associated with the doctor' })
+  clinic?: ClinicsResponseDto;
 }

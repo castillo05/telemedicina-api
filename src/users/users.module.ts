@@ -13,9 +13,10 @@ import { FindUsersUsecase } from './application/use-cases/find-users.usecase';
 import { UpdateUsersUsecase } from './application/use-cases/update-users.usecase';
 import { DeleteUsersUsecase } from './application/use-cases/delete-users.usecase';
 import { ActivateUsersUsecase } from './application/use-cases/activate-users.usecase';
+import { ClinicsModule } from '../clinics/clinics.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), ClinicsModule],
   controllers: [UsersController],
   providers: [
     UsersService,

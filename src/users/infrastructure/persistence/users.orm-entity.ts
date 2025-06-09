@@ -1,8 +1,11 @@
-import { Entity, Column, BeforeInsert, BeforeUpdate, OneToOne } from 'typeorm';
+import { Entity, Column, BeforeInsert, BeforeUpdate, OneToOne, ManyToMany, ManyToOne } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { BaseEntity } from '../../../common/interfaces/base.entity';
 import { Doctor } from '../../../doctors/infrastructure/persistence/doctors.orm-entity';
+import { Clinics } from '../../../clinics/domain/entities/clinics.entity';
+import { ClinicsTypeormRepository } from '../../../clinics/infrastructure/persistence/clinics.typeorm.repository';
+import { ClinicsOrmEntity } from '../../../clinics/infrastructure/persistence/clinics.orm-entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -45,9 +48,12 @@ export class User extends BaseEntity {
   @Exclude()
   resetPasswordExpires: Date;
 
-  @OneToOne(() => Doctor, (doctor) => doctor.user)
+  @Column({ nullable: true })
   @Exclude()
-  doctorProfile?: Doctor;
+  clinicId?: string;
+
+  @ManyToOne(() => ClinicsOrmEntity, (clinic) => clinic.users, { eager: true })
+  clinic?: ClinicsOrmEntity;
 
   @BeforeInsert()
   @BeforeUpdate()

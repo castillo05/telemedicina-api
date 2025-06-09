@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { User } from './src/users/infrastructure/persistence/users.orm-entity';
 import { Doctor } from './src/doctors/infrastructure/persistence/doctors.orm-entity';
+import { ClinicsOrmEntity } from './src/clinics/infrastructure/persistence/clinics.orm-entity';
 
 config();
 
@@ -17,7 +18,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User, Doctor],
+  entities: [User, Doctor, ClinicsOrmEntity],
   migrations: ['dist/database/migrations/*{.ts,.js}'],
   synchronize: true,
   logging: true,

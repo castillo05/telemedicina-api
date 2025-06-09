@@ -7,5 +7,6 @@ export class Doctors {
     public clinicAddress: string,
     public userId: string,
     public isActive: boolean,
+    public clinicId: string,
   ) {}
 }

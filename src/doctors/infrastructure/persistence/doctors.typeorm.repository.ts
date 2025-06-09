@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Doctors } from '../../domain/entities/doctors.entity';
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
@@ -8,11 +8,13 @@ import { DoctorResponseDto } from '../dto/doctor-response.dto';
 import { User } from '../../../users/infrastructure/persistence/users.orm-entity';
 import { UsersRepository } from '../../../users/domain/repositories/users.repository';
 import { DoctorsRepository } from '../../domain/repositories/doctors.repository';
+import { ClinicsRepository } from '../../../clinics/domain/repositories/clinics.repository';
 
 @Injectable()
 export class DoctorsTypeormRepository implements DoctorsRepository {
   constructor(
     @Inject('USERS_REPOSITORY')private readonly userRepository: UsersRepository,
+    @Inject('CLINICS_REPOSITORY') private readonly clinicsRepository: ClinicsRepository,
     @InjectRepository(Doctor) private readonly doctorsRepository: Repository<Doctor>,
   ) {}
 
@@ -21,6 +23,11 @@ export class DoctorsTypeormRepository implements DoctorsRepository {
     if (!searchUser) {
       throw new ConflictException(`Doctor with licence number ${doctor.licenceNumber} already exists.`);
     }
+
+    const searchClinic = await this.clinicsRepository.findById(doctor.clinicId);
+    if (!searchClinic) {
+      throw new NotFoundException(`Clinic with ID ${doctor.clinicId} does not exist.`);
+    }
     const newDoctor = this.doctorsRepository.create({
       speciality: doctor.speciality,
       licenceNumber: doctor.licenceNumber,
@@ -28,6 +35,7 @@ export class DoctorsTypeormRepository implements DoctorsRepository {
       clinicAddress: doctor.clinicAddress,
       user: { id: doctor.userId },
       isActive: doctor.isActive,
+      clinic: { id: doctor.clinicId },
     });
     try{
       const savedDoctor = await this.doctorsRepository.save(newDoctor);

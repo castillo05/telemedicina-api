@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../persistence/users.orm-entity';
 import { Expose, Type } from 'class-transformer';
 import { DoctorResponseDto } from '../../../doctors/infrastructure/dto/doctor-response.dto';
+import { ClinicsResponseDto } from '../../../clinics/infrastructure/dto/clinics.response.dto';
 
 export class UserResponseDto {
   @Expose()
@@ -45,9 +46,9 @@ export class UserResponseDto {
   updatedAt: Date;
 
   @Expose()
-  @Type(() => DoctorResponseDto)
-  @ApiProperty({ type: () => DoctorResponseDto, required: false, description: 'Doctor profile details if available' })
-  doctorProfile?: DoctorResponseDto;
+  @Type(() => ClinicsResponseDto)
+  @ApiProperty({ type: () => ClinicsResponseDto, required: false, description: 'Clinic associated with the user' })
+  clinic?: ClinicsResponseDto;
 
   @ApiProperty({ example: 'John Doe' })
   get fullName(): string {
