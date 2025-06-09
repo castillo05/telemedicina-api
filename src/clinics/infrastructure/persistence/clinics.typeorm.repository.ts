@@ -48,10 +48,7 @@ export class ClinicsTypeormRepository implements ClinicsRepository {
     if (!clinic) {
       return null;
     }
-    return {
-      ...clinic,
-      users: clinic.users.map(user => ({ id: user.id, firstName: user.firstName, lastName: user.lastName })),
-    };
+    return clinic;
   }
 
   async findAll(): Promise<Clinics[]> {

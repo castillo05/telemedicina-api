@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ClinicService } from '../../application/services/clinics.service';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../auth/guards/roles.guard';
 import { Roles } from '../../../auth/decorators/roles.decorator';
@@ -34,5 +34,14 @@ export class ClinicsController {
   @ApiResponse({ status: 200, description: 'Return all clinics', type: [ClinicsResponseDto] })
   async findAllClinics(): Promise<Clinics[]> {
     return this.clinicsService.findAll.execute();
+  }
+
+  @Get(':id')
+  @Roles(UserRole.ADMIN, UserRole.DOCTOR)
+  @ApiOperation({ summary: 'Get clinic by ID' })
+  @ApiResponse({ status: 200, description: 'Return clinic details', type: ClinicsResponseDto })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  async findClinicById(@Body('id') id: string): Promise<Clinics | null> {
+    return this.clinicsService.findById.execute(id);
   }
 }
