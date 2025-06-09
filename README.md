@@ -1,3 +1,5 @@
+# Sistema de Telemedicina API
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -21,41 +23,98 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descripción
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API REST desarrollada con NestJS para un sistema de telemedicina que permite la gestión de consultas médicas virtuales, historiales clínicos, y comunicación entre doctores y pacientes.
 
-## Project setup
+## Arquitectura del Proyecto
+
+El proyecto está estructurado en módulos que manejan diferentes aspectos del sistema:
+
+### Módulos Principales
+
+- **Auth**: Gestión de autenticación y autorización
+- **Users**: Administración de usuarios del sistema
+- **Doctors**: Gestión de perfiles médicos y especialidades
+- **Patients**: Administración de pacientes y sus datos
+- **Appointments**: Sistema de citas médicas virtuales
+- **Medical Records**: Historiales clínicos electrónicos
+- **Prescriptions**: Gestión de recetas médicas
+- **Chat Messages**: Sistema de mensajería para comunicación médico-paciente
+- **Payments**: Procesamiento de pagos y facturación
+- **Plans**: Gestión de planes y suscripciones
+- **Reports**: Generación de reportes y estadísticas
+- **Access Logs**: Registro de accesos al sistema
+- **Audit Logs**: Registro de acciones para auditoría
+
+### Características Técnicas
+
+- Framework: NestJS
+- Lenguaje: TypeScript
+- Base de datos: PostgreSQL (configurada con TypeORM)
+- Autenticación: JWT
+- Documentación API: Swagger/OpenAPI
+
+## Configuración del Proyecto
 
 ```bash
+# Instalación de dependencias
 $ npm install
+
+# Variables de entorno
+Crear un archivo .env basado en .env.example con las configuraciones necesarias
 ```
 
-## Compile and run the project
+## Ejecución del Proyecto
 
 ```bash
-# development
+# Desarrollo
 $ npm run start
 
-# watch mode
+# Modo observador (desarrollo)
 $ npm run start:dev
 
-# production mode
+# Producción
 $ npm run start:prod
 ```
 
-## Run tests
+## Pruebas
 
 ```bash
-# unit tests
+# Pruebas unitarias
 $ npm run test
 
-# e2e tests
+# Pruebas e2e
 $ npm run test:e2e
 
-# test coverage
+# Cobertura de pruebas
 $ npm run test:cov
 ```
+
+## Estructura de Directorios
+
+```
+src/
+├── auth/           # Autenticación y autorización
+├── users/          # Gestión de usuarios
+├── doctors/        # Módulo de doctores
+├── patients/       # Módulo de pacientes
+├── appointments/   # Gestión de citas
+├── medical-records/# Historiales clínicos
+├── prescriptions/  # Recetas médicas
+├── chat-messages/  # Sistema de mensajería
+├── payments/       # Procesamiento de pagos
+├── plans/          # Gestión de planes
+├── reports/        # Generación de reportes
+├── access-logs/    # Registro de accesos
+├── audit-logs/     # Registro de auditoría
+├── common/         # Utilidades y componentes comunes
+└── database/       # Configuración de base de datos
+```
+
+## Documentación API
+
+La documentación de la API está disponible en `/api` cuando el servidor está en ejecución.
 
 ## Deployment
 
