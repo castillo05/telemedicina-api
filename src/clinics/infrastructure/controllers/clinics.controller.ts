@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ClinicService } from '../../application/services/clinics.service';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
@@ -41,7 +41,7 @@ export class ClinicsController {
   @ApiOperation({ summary: 'Get clinic by ID' })
   @ApiResponse({ status: 200, description: 'Return clinic details', type: ClinicsResponseDto })
   @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
-  async findClinicById(@Body('id') id: string): Promise<Clinics | null> {
+  async findClinicById(@Param('id') id: string): Promise<Clinics | null> {
     return this.clinicsService.findById.execute(id);
   }
 }
